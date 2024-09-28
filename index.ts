@@ -39,6 +39,10 @@ if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
 }
 
+app.get('/', (req: Request, res: Response) => {
+    res.send('Hello, World!');
+});
+
 const outDir = './out';
 const cleanOutDirectory = async (dir: string) => {
     try {
@@ -70,8 +74,8 @@ app.post('/upload/solidity', upload.single('file'), (req: Request, res: Response
         const filePath = path.join(uploadDir, req.file.originalname);
         const fileNameWithoutExtension = req.file.originalname.replace(/\.[^/.]+$/, "");
 
-        const {privateKey, rpcUrl} = req.body;
-  
+        const { privateKey, rpcUrl } = req.body;
+
         const forgeCommand = `forge create ${filePath}:${fileNameWithoutExtension} --rpc-url ${rpcUrl} --private-key ${privateKey}`;
 
         exec(forgeCommand, (error, stdout, stderr) => {
