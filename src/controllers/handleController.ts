@@ -52,33 +52,41 @@ export const handleMove = async (req: Request, res: Response, next: NextFunction
         const { privateKey, rpcUrl, moduleName, accAddr } = req.body;
 
         try {
-            await buildMove(moduleName, accAddr);
-            await deployMove(accAddr, privateKey, rpcUrl, moduleName, res);
+            const respBuild = await buildMove(moduleName, accAddr);
+            if (respBuild.stderr.isError) {
+                res.status(500).send(respBuild.stderr.message);
+            }
+            else {
+                await deployMove(accAddr, privateKey, rpcUrl, moduleName, res);
+            }
 
 
-            // Delete the file after successful deployment
-
-            fs.unlink(filePath, (err) => {
-                if (err) {
-                    console.error(`Error deleting file: ${err.message}`);
-                } else {
-                    console.log(`File ${filePath} deleted successfully`);
-                }
-            });
-
-            console.log(`Cleaning out build directory: ${buildDir}`);
-            // Clean out the directory
-            cleanOutDirectory(buildDir);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 console.error(`Deployment failed: ${error.message}`);
-                res.status(500).send(`Deployment failed: ${error.message}`);
+                if (!res.headersSent) {
+                    res.status(500).send(`Deployment failed: ${error.message}`);
+                }
             } else {
                 console.error('An unknown error occurred during deployment');
-                res.status(500).send('An unknown error occurred during deployment');
+                if (!res.headersSent) {
+                    res.status(500).send('An unknown error occurred during deployment');
+                }
             }
         }
+        // Delete the file after upload
 
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                console.error(`Error deleting file: ${err.message}`);
+            } else {
+                console.log(`File ${filePath} deleted successfully`);
+            }
+        });
+
+        console.log(`Cleaning out build directory: ${buildDir}`);
+        // Clean out the directory
+        cleanOutDirectory(buildDir);
     } else {
         res.status(400).send('No file uploaded or file is not .move');
     }
