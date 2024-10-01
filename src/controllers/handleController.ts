@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import { exec } from 'child_process';
 import fs from 'fs';
-import { cleanOutDirectory } from '../utils/cleanOutDirectory';
+import { cleanOutDirectory } from '../services/fileService';
 import { SolDir, outDir, moveDir, buildDir } from '../config/multerConfig';
 import { deploySolidity, deployMove } from './deployController';
 import { buildMove } from './buildController';
