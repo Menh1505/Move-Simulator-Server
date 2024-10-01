@@ -130,3 +130,13 @@ web/dist/
 # Checkpoints
 .turbo/
 
+#nodemon
+bun.lockb
+
+#aptos
+aptos-move/
+sources/
+uploads/
+out/
+build/
+
