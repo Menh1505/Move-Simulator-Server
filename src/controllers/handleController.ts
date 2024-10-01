@@ -2,8 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import { exec } from 'child_process';
 import fs from 'fs';
-import { cleanOutDirectory } from '../services/fileService';
-import { uploadDir, outDir } from '../config/multerConfig';
+import { cleanOutDirectory } from '../utils/cleanOutDirectory';
+import { SolDir, outDir, moveDir, buildDir } from '../config/multerConfig';
+import { deploySolidity, deployMove } from './deployController';
+import { buildMove } from './buildController';
 
 export const handleSolidity = async (req: Request, res: Response, next: NextFunction) => {
     if (req.file && req.file.originalname.endsWith('.sol')) {
