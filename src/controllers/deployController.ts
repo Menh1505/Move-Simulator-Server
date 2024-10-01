@@ -27,6 +27,7 @@ export const deploySolidity = async (filePath: string, fileNameWithoutExtension:
     });
 };
 
+
 export const deployMove = async (accAddr: string, privateKey: string, rpcUrl: string, moduleName: string, res: Response): Promise<void> => {
     const moveCommand = `aptos move publish --sender-account ${accAddr} --url ${rpcUrl} --private-key ${privateKey} --named-addresses ${moduleName}=${accAddr}`;
     const moveArgs = moveCommand.split(' ');
@@ -77,4 +78,5 @@ export const deployMove = async (accAddr: string, privateKey: string, rpcUrl: st
         });
     });
 };
+
 
