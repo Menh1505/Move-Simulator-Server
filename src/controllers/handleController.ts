@@ -17,7 +17,6 @@ export const handleSolidity = async (req: Request, res: Response, next: NextFunc
 
         try {
             await deploySolidity(filePath, fileNameWithoutExtension, rpcUrl, privateKey, res);
-
             // Delete the file after successful deployment
 
         } catch (error: unknown) {
