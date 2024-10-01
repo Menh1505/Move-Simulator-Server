@@ -19,16 +19,7 @@ export const handleSolidity = async (req: Request, res: Response, next: NextFunc
             await deploySolidity(filePath, fileNameWithoutExtension, rpcUrl, privateKey, res);
 
             // Delete the file after successful deployment
-            fs.unlink(filePath, (err) => {
-                if (err) {
-                    console.error(`Error deleting file: ${err.message}`);
-                } else {
-                    console.log(`File ${filePath} deleted successfully`);
-                }
-            });
 
-            // Clean out the directory
-            cleanOutDirectory(outDir);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 console.error(`Deployment failed: ${error.message}`);
@@ -38,7 +29,16 @@ export const handleSolidity = async (req: Request, res: Response, next: NextFunc
                 res.status(500).send('An unknown error occurred during deployment');
             }
         }
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                console.error(`Error deleting file: ${err.message}`);
+            } else {
+                console.log(`File ${filePath} deleted successfully`);
+            }
+        });
 
+        // Clean out the directory
+        cleanOutDirectory(outDir);
     } else {
         res.status(400).send('No file uploaded or file is not .sol');
     }
