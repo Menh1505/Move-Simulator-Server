@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { uploadSolidity, uploadMove } from '../controllers/uploadController';
-import { upload } from '../config/multerConfig';
+import { handleSolidity, handleMove } from '../controllers/handleController';
+import { uploadSol, uploadMove } from '../config/multerConfig';
 
 const router = Router();
 
-router.post('/upload/solidity', upload.single('file'), uploadSolidity);
-router.post('/upload/move/deploy', upload.single('file'), uploadMove);
+router.post('/upload/solidity', uploadSol.single('file'), handleSolidity);
+router.post('/upload/move', uploadMove.single('file'), handleMove);
 
 export default router;
