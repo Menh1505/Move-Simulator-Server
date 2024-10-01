@@ -25,3 +25,15 @@ export const deploySolidity = async (filePath: string, fileNameWithoutExtension:
         });
     });
 };
+
+export const deployMove = async (accAddr: string, privateKey: string, rpcUrl: string, moduleName: string, res: Response) => {
+    const moveCommand = `aptos move publish --sender-account ${accAddr} --url ${rpcUrl} --private-key ${privateKey} --named-addresses ${moduleName}=${accAddr}`;
+
+    console.log(`Deploying Move module: ${moduleName}`);
+    return new Promise<void>((resolve, reject) => {
+        exec(moveCommand, (error, stdout, stderr) => {
+            res.send(`Command output: ${stdout}`);
+            resolve();
+        });
+    });
+};
