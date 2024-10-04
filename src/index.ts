@@ -3,7 +3,7 @@ import { errorHandler } from './middlewares/errorHandler';
 import Routes from './routes/Routes';
 import { SolDir, moveDir } from './config/multerConfig';
 import fs from 'fs';
-import path from 'path';
+import cors from 'cors';
 require('dotenv').config();
 
 const app = express();
@@ -13,6 +13,14 @@ if (!fs.existsSync(SolDir)) {
 if (!fs.existsSync(moveDir)) {
     fs.mkdirSync(moveDir);
 }
+const corsOptions = {
+    origin: ['http://localhost:3000', 'http://3.107.36.227:3000'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 app.use(Routes);
 app.use(errorHandler);
 const port = process.env.PORT || 3000;
